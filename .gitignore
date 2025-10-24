@@ -1,0 +1,32 @@
+# === OS Files ===
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# === IDEs ===
+# VS Code
+.vscode/
+
+# WebStorm / JetBrains
+.idea/
+
+# === Logs / Temp ===
+*.log
+*.tmp
+*.bak
+
+# === Others ===
+# Cache folders
+.cache/
+dist/
+build/
+tmp/

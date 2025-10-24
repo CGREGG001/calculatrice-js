@@ -1,0 +1,11 @@
+#!/bin/sh
+# Récupère le message du commit
+commit_msg=$(cat "$1")
+
+# Regex pour Conventional Commit (type: description)
+pattern="^(feat|fix|chore|docs|style|refactor|perf|test|build|ci|revert)(\([a-z0-9_-]+\))?: .+"
+
+if ! echo "$commit_msg" | grep -Eq "$pattern"; then
+  echo "Erreur : message de commit non conforme à Conventional Commits"
+  exit 1
+fi

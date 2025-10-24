@@ -1,0 +1,12 @@
+#!/bin/sh
+# === Auto-format with Prettier before committing ===
+
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|css|html)$')
+
+if [ -n "$FILES" ]; then
+  echo "🧹 Formatting staged files with Prettier..."
+  prettier --write $FILES
+  git add $FILES
+else
+  echo "No files to format."
+fi
