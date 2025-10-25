@@ -6,6 +6,13 @@
   padding: 0;
 }
 
+@font-face {
+  font-family: "Segment7";
+  src: url("../assets/fonts/Segment7Standard.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   background-color: #2a282f;
 }
@@ -36,13 +43,14 @@ section {
 .display {
   width: 360px;
   height: 100px;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-family: "Segment7", monospace;
   font-size: 4rem;
-  padding: 10px;
+  text-align: right;
+  padding: 10px 10px 0 5px;
   background-color: rgb(176, 221, 211);
   margin: 30px auto;
   border: 2px solid rgb(40, 40, 40);
-  box-shadow: inset 0 0 10px 2px #000;
+  box-shadow: inset 0 0 4px 2px #000;
   border-radius: 4px;
 }
 
@@ -89,4 +97,24 @@ button {
 .btn-wide {
   /* prend deux cases en hauteur */
   grid-row: span 2;
+}
+
+.btn-rac::before {
+  content: "√";
+  font-size: 1.2em;
+}
+
+.btn-multi::before {
+  content: "×";
+  font-size: 1.2em;
+}
+
+.btn-division::before {
+  content: "÷";
+  font-size: 1.2em;
+}
+
+.btn-plus-minus::before {
+  content: "±";
+  font-size: 1.2em;
 }
