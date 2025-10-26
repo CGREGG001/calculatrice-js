@@ -30,3 +30,8 @@ Ce projet utilise les Conventional Commits :
 - fix: correction de bug
 - chore: tâches de configuration ou maintenance
 - etc.
+
+### Fonts
+- **Segment7** — by *Cedric Knight*  
+  Licensed under the [SIL Open Font License 1.1](https://scripts.sil.org/OFL).  
+  [Source](https://fontlibrary.org/en/font/segment7)

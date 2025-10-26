@@ -21,6 +21,11 @@
   --button-hover-bg: rgb(57, 55, 69);
 }
 
+/* 
+  Font: Segment7 by Cedric Knight
+  License: SIL Open Font License 1.1
+  Source: https://fontlibrary.org/en/font/segment7
+*/
 @font-face {
   font-family: "Segment7";
   src: url("../assets/fonts/Segment7Standard.woff2") format("woff2");
