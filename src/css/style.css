@@ -35,31 +35,34 @@
 
 body {
   background-color: var(--bg-body);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 section {
-    width: 800px;
-    height: 800px;
-    margin: 100px auto;
-    background-color: var(--bg-section);
-    border-radius: 20%;
+  width: 600px;
+  height: 800px;
+  background-color: var(--bg-section);
+  border-radius: 10px;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .calculator {
-    background-color: var(--bg-calculator);
-    width: 400px;
-    height: 600px;
-    border: 2px solid var(--border-calculator);
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px 2px var(--shadow-calculator);
+  background-color: var(--bg-calculator);
+  width: 400px;
+  height: 600px;
+  border: 2px solid var(--border-calculator);
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 2px var(--shadow-calculator);
 
-    display: flex;
-    flex-direction: column;
-  }
+  display: flex;
+  flex-direction: column;
+}
 
 .display {
   width: 360px;
@@ -92,7 +95,9 @@ button {
   font-weight: 900;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease, border 0.1s ease;
+  transition:
+    background-color 0.2s ease,
+    border 0.1s ease;
 
   &:hover {
     background-color: var(--button-hover-bg);
@@ -112,9 +117,9 @@ button {
   background-color: var(--button-bg-operator-special);
 }
 
-.btn-specialFunct.btn-plus-minus{
+.btn-specialFunct.btn-plus-minus {
   background-color: var(--button-bg-number);
-  
+
   &:hover {
     background-color: var(--button-hover-bg);
   }
