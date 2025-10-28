@@ -111,6 +111,60 @@ function handleOperatorInput(nextOperator) {
 }
 
 /**
+ * Réinitialise l'état interne de la calculatrice
+ * Met à zéro ou null toutes les variables importantes :
+ * - currentInput : affichage courant
+ * - firstOperand : premier opérande
+ * - operator : opérateur actif
+ * - waitingForSecondOperand : indique si on attend le second opérande
+ */
+function resetState() {
+  currentInput = "0";
+  firstOperand = null;
+  operator = null;
+  waitingForSecondOperand = false;
+}
+
+/**
+ * Gère le clic sur le bouton '='
+ * Fonction principale pour effectuer le calcul lorsqu'un utilisateur
+ * clique sur '='. Elle prend en compte :
+ * - l'absence de premier opérande ou d'opérateur
+ * - l'état 'Error'
+ * - la conversion des valeurs affichées en nombres
+ * - la gestion des erreurs (division par zéro)
+ * - la mise à jour de currentInput et des états de la calculatrice
+ */
+function handleEqualInput() {
+  // Si pas de premier opérande ou pas d'opérateur, on ne fait rien
+  if (firstOperand === null || operator === null) {
+    return;
+  }
+
+  if (currentInput === "Error") {
+    resetState();
+    return;
+  }
+
+  const secondOperand = parseFloat(currentInput); // Le nombre actuellement affiché est le second opérande
+
+  // Effectuer l'opération
+  const result = performCalculation(firstOperand, secondOperand, operator);
+
+  // Gérer les erreurs (ex: division par zéro)
+  if (result === "Error") {
+    resetState();
+    currentInput = "Error";
+    waitingForSecondOperand = true; // Le prochain chiffre remplacera l'affichage
+    return;
+  }
+
+  currentInput = result.toString(); // Afficher le résultat
+  firstOperand = null; // Réinitialiser firstOperand
+  waitingForSecondOperand = true; // Le prochain chiffre remplacera le résultat
+}
+
+/**
  * Effectue un calcul arithmétique entre deux nombres selon l'opérateur.
  * @param {number} num1 - Premier opérande.
  * @param {number} num2 - Second opérande.
