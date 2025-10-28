@@ -3,14 +3,14 @@ const display = document.querySelector(".display");
 const buttons = document.querySelectorAll(".keyboard button");
 
 // Variables d'état principales de la calculatrice
-let currentInput = '0';              // Valeur actuellement affichée
-let firstOperand = null;             // Premier opérande (utilisé lors d’une opération)
-let operator = null;                 // Opérateur sélectionné (+, -, etc.)
+let currentInput = "0"; // Valeur actuellement affichée
+let firstOperand = null; // Premier opérande (utilisé lors d’une opération)
+let operator = null; // Opérateur sélectionné (+, -, etc.)
 let waitingForSecondOperand = false; // Indique si on attend le deuxième nombre
 
 // Ajout des écouteurs d'événements sur chaque bouton
-buttons.forEach(button => {
-    button.addEventListener('click', () => handleButtonClick(button));
+buttons.forEach((button) => {
+  button.addEventListener("click", () => handleButtonClick(button));
 });
 
 // Affiche la valeur initiale au démarrage
@@ -22,21 +22,31 @@ updateDisplay();
  * et délègue le traitement à la fonction appropriée.
  */
 function handleButtonClick(button) {
-    const keyValue = button.dataset.key; // Récupère la valeur associée au bouton
+  const keyValue = button.dataset.key; // Récupère la valeur associée au bouton
 
-    if (button.classList.contains('btn-number'))
-        handleNumberInput(keyValue); // Gestion des chiffres
-    else if (button.classList.contains('btn-dot'))
-        handleDotInput(keyValue);    // Gestion du point décimal
+  if (button.classList.contains("btn-number"))
+    handleNumberInput(keyValue); // Gestion des chiffres
+  else if (button.classList.contains("btn-dot"))
+    handleDotInput(keyValue); // Gestion du point décimal
+  else if (button.classList.contains("btn-operator") && keyValue !== "=")
+    // Gestion des opérateurs exepté '='
+    handleOperatorInput(keyValue);
+  else if (keyValue === "=") handleEqualInput();
 
-    updateDisplay(); // Met à jour l’écran après chaque action
+  updateDisplay(); // Met à jour l’écran après chaque action
+
+  console.log("firstoperand: " + firstOperand);
+  console.log("currentInput: " + currentInput);
+  console.log("waiting: " + waitingForSecondOperand);
+  console.log("********************");
+  console.log(" ");
 }
 
 /**
  * Met à jour le contenu de l’écran avec la valeur courante.
  */
 function updateDisplay() {
-    display.textContent = currentInput;
+  display.textContent = currentInput;
 }
 
 /**
@@ -46,22 +56,19 @@ function updateDisplay() {
  * - Réinitialise correctement l’état si on attendait un second opérande.
  */
 function handleNumberInput(keyValue) {
-    if (waitingForSecondOperand) {
-        // Si on vient de saisir un opérateur, on démarre un nouveau nombre
-        currentInput = keyValue;
-        waitingForSecondOperand = false;
-    }
-    else if (currentInput === '0' && keyValue === '0') {
-        currentInput = '0'; // Évite plusieurs zéros consécutifs au début
-    }
-    else if (currentInput === '0') {
-        currentInput = keyValue; // Remplace le zéro initial
-    }
-    else {
-        currentInput += keyValue; // Ajoute le chiffre à la fin du nombre courant
-    }
+  if (waitingForSecondOperand) {
+    // Si on vient de saisir un opérateur, on démarre un nouveau nombre
+    currentInput = keyValue;
+    waitingForSecondOperand = false;
+  } else if (currentInput === "0" && keyValue === "0") {
+    currentInput = "0"; // Évite plusieurs zéros consécutifs au début
+  } else if (currentInput === "0") {
+    currentInput = keyValue; // Remplace le zéro initial
+  } else {
+    currentInput += keyValue; // Ajoute le chiffre à la fin du nombre courant
+  }
 
-    console.log(currentInput); // (Debug) Affiche la valeur courante dans la console
+  console.log(currentInput); // (Debug) Affiche la valeur courante dans la console
 }
 
 /**
@@ -70,11 +77,22 @@ function handleNumberInput(keyValue) {
  * - Empêche d’ajouter plusieurs points dans le même nombre.
  */
 function handleDotInput(keyValue) {
-    if (waitingForSecondOperand) {
-        currentInput = '0.';         // Démarre un nouveau nombre décimal
-        waitingForSecondOperand = false; // Sort de l’état d’attente
-    }
+  if (waitingForSecondOperand) {
+    currentInput = "0."; // Démarre un nouveau nombre décimal
+    waitingForSecondOperand = false; // Sort de l’état d’attente
+  }
 
-    if (!currentInput.includes('.')) // Empêche les doublons de point
-        currentInput += keyValue;
+  if (!currentInput.includes("."))
+    // Empêche les doublons de point
+    currentInput += keyValue;
+}
+
+/**
+ *
+ * Gère l'entrée des opérateurs
+ */
+function handleOperatorInput(nextoperator) {
+  firstOperand = currentInput;
+  waitingForSecondOperand = true;
+  operator = nextoperator;
 }
