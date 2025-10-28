@@ -34,12 +34,6 @@ function handleButtonClick(button) {
   else if (keyValue === "=") handleEqualInput();
 
   updateDisplay(); // Met à jour l’écran après chaque action
-
-  console.log("firstoperand: " + firstOperand);
-  console.log("currentInput: " + currentInput);
-  console.log("waiting: " + waitingForSecondOperand);
-  console.log("********************");
-  console.log(" ");
 }
 
 /**
@@ -73,7 +67,7 @@ function handleNumberInput(keyValue) {
 
 /**
  * Gère l'entrée du point décimal.
- * - Si on attend un second opérande, commence un nouveau nombre avec "0."
+ * - Si on attend un second opérande, commence un nouveau nombre avec '0.'
  * - Empêche d’ajouter plusieurs points dans le même nombre.
  */
 function handleDotInput(keyValue) {
@@ -88,32 +82,47 @@ function handleDotInput(keyValue) {
 }
 
 /**
- *
- * Gère l'entrée des opérateurs
+ * Gère la saisie d'un opérateur (+, -, *, /)
  */
-function handleOperatorInput(nextoperator) {
-  firstOperand = currentInput;
-  waitingForSecondOperand = true;
-  operator = nextoperator;
+function handleOperatorInput(nextOperator) {
+  const inputValue = parseFloat(currentInput);
+
+  // Si firstOperand est null, c'est le début d'une nouvelle chaîne de calcul
+  if (firstOperand === null) {
+    firstOperand = inputValue;
+  } else if (operator) {
+    // Si un opérateur précédent existe, effectuer le calcul
+    const result = performCalculation(firstOperand, inputValue, operator);
+    // Gérer les erreurs de calcul (ex: division par zéro)
+    if (result === "Error") {
+      currentInput = "Error";
+      firstOperand = null;
+      operator = null;
+      waitingForSecondOperand = true;
+      updateDisplay(); // Important pour afficher l'erreur immédiatement
+      return; // Arrêter le traitement
+    }
+    currentInput = result.toString(); // Afficher le résultat intermédiaire
+    firstOperand = result; // Le résultat devient le nouveau premier opérande
+  }
+
+  waitingForSecondOperand = true; // Attendre le second opérande pour le nouvel opérateur
+  operator = nextOperator; // Stocker le nouvel opérateur
 }
 
 /**
- * Effectue un calcul arithmétique entre deux nombres en fonction de l'opérateur fourni.
- *
- * @param {number} num1 - Le premier opérande (gauche).
- * @param {number} num2 - Le second opérande (droite).
- * @param {string} operator - L'opérateur à appliquer : "+", "-", "*", "/".
- * @returns {number|string} Le résultat du calcul.
- *          Retourne "Error" si division par zéro.
- *          Si l'opérateur n'est pas reconnu, renvoie num2.
- *
- * @example
- * performCalculation(2, 3, "+"); // renvoie 5
- * performCalculation(10, 2, "/"); // renvoie 5
- * performCalculation(10, 0, "/"); // renvoie "Error"
+ * Effectue un calcul arithmétique entre deux nombres selon l'opérateur.
+ * @param {number} num1 - Premier opérande.
+ * @param {number} num2 - Second opérande.
+ * @param {string} operator - Opérateur : '+', '-', '*', '/'.
+ * @returns {number|string} Résultat du calcul ou 'Error' si division par zéro.
  */
 function performCalculation(num1, num2, operator) {
-  let result = 0;
+  if (!Number.isFinite(num1) || !Number.isFinite(num2)) {
+    return "Error";
+  }
+
+  let result;
 
   switch (operator) {
     case "+":
@@ -126,11 +135,10 @@ function performCalculation(num1, num2, operator) {
       result = num1 * num2;
       break;
     case "/":
-      result = num2 !== 0 ? num1 / num2 : NaN;
+      result = num2 !== 0 ? num1 / num2 : "Error";
       break;
     default:
-      // Si l'opérateur n'est pas reconnu, on renvoie num2 par défaut
-      result = num2;
+      result = "Error";
       break;
   }
 
