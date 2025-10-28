@@ -96,3 +96,43 @@ function handleOperatorInput(nextoperator) {
   waitingForSecondOperand = true;
   operator = nextoperator;
 }
+
+/**
+ * Effectue un calcul arithmétique entre deux nombres en fonction de l'opérateur fourni.
+ *
+ * @param {number} num1 - Le premier opérande (gauche).
+ * @param {number} num2 - Le second opérande (droite).
+ * @param {string} operator - L'opérateur à appliquer : "+", "-", "*", "/".
+ * @returns {number|string} Le résultat du calcul.
+ *          Retourne "Error" si division par zéro.
+ *          Si l'opérateur n'est pas reconnu, renvoie num2.
+ *
+ * @example
+ * performCalculation(2, 3, "+"); // renvoie 5
+ * performCalculation(10, 2, "/"); // renvoie 5
+ * performCalculation(10, 0, "/"); // renvoie "Error"
+ */
+function performCalculation(num1, num2, operator) {
+  let result = 0;
+
+  switch (operator) {
+    case "+":
+      result = num1 + num2;
+      break;
+    case "-":
+      result = num1 - num2;
+      break;
+    case "*":
+      result = num1 * num2;
+      break;
+    case "/":
+      result = num2 !== 0 ? num1 / num2 : NaN;
+      break;
+    default:
+      // Si l'opérateur n'est pas reconnu, on renvoie num2 par défaut
+      result = num2;
+      break;
+  }
+
+  return result;
+}
