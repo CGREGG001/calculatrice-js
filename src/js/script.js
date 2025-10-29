@@ -24,14 +24,16 @@ updateDisplay();
 function handleButtonClick(button) {
   const keyValue = button.dataset.key; // Récupère la valeur associée au bouton
 
-  if (button.classList.contains("btn-number"))
+  if (keyValue === "=") handleEqualInput();
+  else if (button.classList.contains("btn-ca")) clearAll();
+  else if (button.classList.contains("btn-c")) clear();
+  else if (button.classList.contains("btn-number"))
     handleNumberInput(keyValue); // Gestion des chiffres
   else if (button.classList.contains("btn-dot"))
     handleDotInput(keyValue); // Gestion du point décimal
   else if (button.classList.contains("btn-operator") && keyValue !== "=")
     // Gestion des opérateurs exepté '='
     handleOperatorInput(keyValue);
-  else if (keyValue === "=") handleEqualInput();
 
   updateDisplay(); // Met à jour l’écran après chaque action
 }
@@ -197,4 +199,13 @@ function performCalculation(num1, num2, operator) {
   }
 
   return result;
+}
+
+function clearAll() {
+  // Appelle de la fonction resetState()
+  resetState();
+}
+
+function clear() {
+  currentInput = "0";
 }
