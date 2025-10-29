@@ -31,9 +31,10 @@ function handleButtonClick(button) {
     handleNumberInput(keyValue); // Gestion des chiffres
   else if (button.classList.contains("btn-dot"))
     handleDotInput(keyValue); // Gestion du point décimal
-  else if (button.classList.contains("btn-operator") && keyValue !== "=")
+  else if (button.classList.contains("btn-operator") && keyValue !== "=" && keyValue !== "%")
     // Gestion des opérateurs exepté '='
     handleOperatorInput(keyValue);
+  else if (keyValue === "%") handlePercentInput();
 
   updateDisplay(); // Met à jour l’écran après chaque action
 }
@@ -223,4 +224,62 @@ function clearAll() {
  */
 function clear() {
   currentInput = "0";
+}
+
+/**
+ * Calcule la valeur d'un pourcentage relatif.
+ *
+ * Exemple : calculatePercent(200, 10) → 20
+ *  - base : valeur de référence (ex. 200)
+ *  - value : pourcentage à appliquer (ex. 10)
+ *
+ * @param {number} base - La valeur de base sur laquelle calculer le pourcentage.
+ * @param {number} value - Le pourcentage à appliquer.
+ * @returns {number} La valeur correspondant au pourcentage de la base.
+ */
+function calculatePercent(base, value) {
+  return (base / 100) * value;
+}
+
+/**
+ * Gère la logique du bouton '%'
+ * - Cas avec opérateur : calcul relatif (ex. 200 + 10% = 220)
+ * - Cas sans opérateur : convertit en pourcentage (ex. 50% = 0.5)
+ */
+function handlePercentInput() {
+  let percent = 0;
+  let firstOp = parseFloat(firstOperand);
+  let current = parseFloat(currentInput);
+
+  // Culcul du pourcentage
+  if (firstOperand !== null && operator !== null) {
+    percent = calculatePercent(firstOp, current);
+  }
+
+  //  Application résultat selon l'opérateur
+  switch (operator) {
+    case "+":
+      currentInput = performCalculation(firstOp, percent, operator).toString();
+      break;
+    case "-":
+      currentInput = performCalculation(firstOp, percent, operator).toString();
+      break;
+    case "*":
+      currentInput = percent.toString();
+      break;
+    case "/":
+      if (current !== 0) {
+        currentInput = ((firstOp / current) * 100).toString();
+      } else {
+        currentInput = "Error";
+      }
+      break;
+    default:
+      currentInput = (current / 100).toString();
+      break;
+  }
+
+  // Mise à jour d'état
+  firstOperand = null;
+  waitingForSecondOperand = true;
 }
