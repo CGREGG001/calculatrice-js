@@ -201,11 +201,26 @@ function performCalculation(num1, num2, operator) {
   return result;
 }
 
+/**
+ * Réinitialise complètement l'état de la calculatrice.
+ *
+ * Appelle la fonction resetState() pour remettre à zéro :
+ * - l'entrée courante,
+ * - le premier opérande,
+ * - l'opérateur,
+ * - et le flag d'attente du second opérande.
+ */
 function clearAll() {
   // Appelle de la fonction resetState()
   resetState();
 }
 
+/**
+ * Efface uniquement l'entrée courante sans modifier le reste de l'état.
+ *
+ * Utilisé pour le bouton "C" : permet de recommencer la saisie du nombre
+ * sans perdre le calcul ou l'opération en cours.
+ */
 function clear() {
   currentInput = "0";
 }
