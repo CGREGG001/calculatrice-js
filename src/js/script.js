@@ -14,6 +14,7 @@ let operator = null; // Opérateur sélectionné (+, -, etc.)
 let waitingForSecondOperand = false; // Indique si on attend le deuxième nombre
 let memory = 0; // Valeur mise en mémoire
 let memoryIsRecalled = false; // Indique si la dernière action mémoire était un rappel (true) ou non (false)
+const limitChar = 9;
 
 // --- Initialisation ---
 // Ajout des écouteurs d'événements sur chaque bouton
@@ -68,6 +69,7 @@ function handleButtonClick(button) {
       break;
   }
 
+  numberLimit(); // Vérifie la longueur du nombre après chaque action
   updateDisplay(); // Met à jour l’écran après chaque action
 }
 
@@ -77,6 +79,17 @@ function handleButtonClick(button) {
  */
 function updateDisplay() {
   display.textContent = currentInput;
+}
+
+/**
+ * Limite la longueur de currentInput lors de la saisie à 9 caractères.
+ * Si la longueur dépasse 9 caractères, affiche "E0000000".
+ */
+function numberLimit() {
+  if (currentInput.length > limitChar) {
+    currentInput = "E0000000"; // Affichage d'erreur si plus de 8 caractères
+    waitingForSecondOperand = false; // On empêche de saisir d'autres chiffres
+  }
 }
 
 // --- Saisie ---
@@ -153,7 +166,8 @@ function handleOperatorInput(nextOperator) {
  * - l'état 'Error'
  * - la conversion des valeurs affichées en nombres
  * - la gestion des erreurs (division par zéro)
- * - la mise à jour de currentInput et des états de la calculatrice
+ * - la mise à jour de currentInput avec limitation à 9 caractères
+ * - la mise à jour des états de la calculatrice
  */
 function handleEqualInput() {
   // Si pas de premier opérande ou pas d'opérateur, on ne fait rien
@@ -179,7 +193,7 @@ function handleEqualInput() {
     return;
   }
 
-  currentInput = result.toString(); // Afficher le résultat
+  currentInput = limitTo9Characters(result);
   firstOperand = null; // Réinitialiser firstOperand
   waitingForSecondOperand = true; // Le prochain chiffre remplacera le résultat
 }
@@ -353,6 +367,7 @@ function handlePercentInput() {
  * Calcule la racine carrée de l'entrée actuelle.
  * - Si l'entrée est négative, réinitialise la calculatrice et affiche "Error".
  * - Sinon, remplace l'entrée par la racine carrée du nombre.
+ * - Limite la longueur de sortie à 9 caractères.
  * - Met à jour le flag `waitingForSecondOperand` pour préparer la prochaine saisie.
  */
 function handleSqrt() {
@@ -365,7 +380,8 @@ function handleSqrt() {
   }
   else {
     const squareRoot = Math.sqrt(value);
-    currentInput = squareRoot.toString();
+    // Appliquer la limitation à 8 caractères pour le résultat
+    currentInput = limitTo9Characters(squareRoot);
     waitingForSecondOperand = true;
   }
 }
@@ -501,4 +517,49 @@ function resetMemoryRecallFlag(action, keyValue) {
   if (!(action === "memory" && keyValue === "recallClearMemory")) {
     memoryIsRecalled = false;
   }
+}
+
+/**
+ * Fonction développée par ChatGPT (modèle de langage d'OpenAI),
+ * qui permet de limiter une valeur numérique à 9 caractères au total 
+ * (en prenant en compte la partie entière et décimale). 
+ * 
+ * Cette fonction effectue plusieurs vérifications :
+ * - Si la valeur dépasse 8 caractères dans la partie entière, elle retourne "Error".
+ * - Si la valeur contient une partie décimale, elle arrondit le résultat 
+ *   en limitant la longueur totale à 8 caractères, y compris la virgule.
+ * - Si la partie entière est inférieure ou égale à 8 caractères, la fonction 
+ *   conserve la valeur entière et l'arrondie si nécessaire.
+ * 
+ * Ce code a été intégré dans la calculatrice pour respecter la limite des 
+ * caractères d'affichage tout en permettant des calculs précis et fiables.
+ */
+function limitTo9Characters(value) {
+  // Vérifier si la valeur est un nombre valide
+  if (isNaN(value)) return "Error";
+
+  // Convertir la valeur en chaîne
+  let strValue = value.toString();
+
+  // Si la partie entière dépasse 8 caractères, afficher "Error"
+  let integerPartLength = strValue.includes('.') ? strValue.split('.')[0].length : strValue.length;
+  
+  if (integerPartLength > 8) {
+    return "Error";
+  }
+
+  // Si la valeur dépasse 8 caractères (avant et après la virgule), on arrondit
+  let decimalIndex = strValue.indexOf('.');
+  if (decimalIndex !== -1) {
+    let integerLength = decimalIndex;
+    let maxDecimalLength = 8 - integerLength - 1; // 8 caractères max incluant la virgule
+
+    // Arrondir la partie décimale à ce nombre de décimales
+    strValue = parseFloat(value).toFixed(maxDecimalLength);
+  } else {
+    // Si pas de virgule (entier), on limite la longueur à 8 caractères
+    strValue = strValue.slice(0, 8);
+  }
+
+  return strValue;
 }
