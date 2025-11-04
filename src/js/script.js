@@ -44,19 +44,23 @@ function handleButtonClick(button) {
     case "number":
       if (keyValue === ".")
         handleDotInput(keyValue);
-      else 
+      else
         handleNumberInput(keyValue);
       break;
     case "operator":
-        if (keyValue === "=")
-          handleEqualInput();
-        else
-          handleOperatorInput(keyValue);
+      if (keyValue === "=")
+        handleEqualInput();
+      else
+        handleOperatorInput(keyValue);
       break;
-    case "special" :
-        handleSpecialAction(keyValue);
+    case "special":
+      handleSpecialInput(keyValue);
+      break;
+    case "memory":
+      handleMemoryInput(keyValue);
       break;
     default:
+      console.warn(`Action inconnue détectée : "${action}"`);
       break;
   }
 
@@ -253,7 +257,7 @@ function calculatePercent(base, value) {
  *   - "sqrt" : Calcule la racine carrée de l'entrée actuelle.
  *   - "negate" : Négative l'entrée actuelle (multiplie par -1).
  */
-function handleSpecialAction(keyValue) {
+function handleSpecialInput(keyValue) {
   switch (keyValue) {
     case "clearAll":
       clearAll();
@@ -348,7 +352,7 @@ function handlePercentInput() {
  */
 function handleSqrt() {
   let value = parseFloat(currentInput);
-  
+
   if (value < 0) {
     resetState();
     currentInput = "Error"
@@ -358,7 +362,7 @@ function handleSqrt() {
     const squareRoot = Math.sqrt(value);
     currentInput = squareRoot.toString();
     waitingForSecondOperand = true;
-  }  
+  }
 }
 
 /**
@@ -375,4 +379,17 @@ function handleNegate() {
     currentInput = negatedValue.toString();
     waitingForSecondOperand = true;
   }
+}
+
+// --- Actions Mémoire ---
+/**
+ * Gère les actions liées à la mémoire (M+, M-, RM/CM).
+ * 
+ * @param {string} keyValue - Type d’action mémoire :
+ *   - "memoryAdd" : ajoute la valeur courante à la mémoire.
+ *   - "memorySubtract" : soustrait la valeur courante à la mémoire.
+ *   - "recallClearMemory" : rappelle la valeur mémoire (ou la vide si déjà rappelée).
+ */
+function handleMemoryInput(keyValue) {
+  // TODO: implémentation
 }
