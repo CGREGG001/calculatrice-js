@@ -113,11 +113,11 @@ button {
 }
 
 .btn-operator,
-.btn-specialFunct {
+.btn-special {
   background-color: var(--button-bg-operator-special);
 }
 
-.btn-specialFunct.btn-plus-minus {
+.btn-special.btn-plus-minus {
   background-color: var(--button-bg-number);
 
   &:hover {
