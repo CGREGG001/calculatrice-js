@@ -12,7 +12,8 @@ let currentInput = "0"; // Valeur actuellement affichée
 let firstOperand = null; // Premier opérande (utilisé lors d’une opération)
 let operator = null; // Opérateur sélectionné (+, -, etc.)
 let waitingForSecondOperand = false; // Indique si on attend le deuxième nombre
-let memory = 0;
+let memory = 0; // Valeur mise en mémoire
+let memoryIsRecalled = false; // Indique si la dernière action mémoire était un rappel (true) ou non (false)
 
 // --- Initialisation ---
 // Ajout des écouteurs d'événements sur chaque bouton
@@ -40,6 +41,8 @@ updateDisplay();
 function handleButtonClick(button) {
   const action = button.dataset.action;
   const keyValue = button.dataset.key; // Récupère la valeur associée au bouton
+
+  resetMemoryRecallFlag(action, keyValue);
 
   switch (action) {
     case "number":
@@ -290,6 +293,7 @@ function handleSpecialInput(keyValue) {
 function clearAll() {
   // Appelle de la fonction resetState()
   resetState();
+  memory = 0;
 }
 
 /**
@@ -400,6 +404,17 @@ function handleMemoryInput(keyValue) {
       handleMemorySubtract();
       break;
     case "recallClearMemory":
+      // Premier appui : rappelle la mémoire dans l'affichage
+      // Deuxième appui consécutif : efface la mémoire
+      // Le flag memoryIsRecall sert à savoir si la dernière action
+      // était un rappel pour décider si on doit maintenant effacer.
+      if (memoryIsRecalled === true) {
+        handleClearMemory();
+        memoryIsRecalled = false;
+      }
+      else {
+        handleRecallMemory();
+      }
       break;
   }
 }
@@ -420,4 +435,27 @@ function handleMemorySubtract() {
     memory -= value;
 
   waitingForSecondOperand = true;
+}
+
+function handleRecallMemory() {
+  currentInput = memory.toString();
+  waitingForSecondOperand = true;
+  memoryIsRecalled = true;
+
+  console.log(memoryIsRecalled);
+  
+}
+
+function handleClearMemory() {
+  memory = 0;
+  currentInput = 0; // Afficher 0 dans le display
+  waitingForSecondOperand = true;
+  memoryIsRecalled = false;
+}
+
+function resetMemoryRecallFlag(action, keyValue) {
+  // Tout bouton autre que RM/CM réinitialise le flag
+  if (!(action === "memory" && keyValue === "recallClearMemory")) {
+    memoryIsRecalled = false;
+  }
 }
