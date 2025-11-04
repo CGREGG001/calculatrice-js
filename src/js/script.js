@@ -1,5 +1,5 @@
+// --- DOM & état ---
 // Sélection des éléments du DOM
-
 const display = document.getElementById("display");
 const buttons = document.querySelectorAll(".keyboard button");
 
@@ -13,6 +13,7 @@ let firstOperand = null; // Premier opérande (utilisé lors d’une opération)
 let operator = null; // Opérateur sélectionné (+, -, etc.)
 let waitingForSecondOperand = false; // Indique si on attend le deuxième nombre
 
+// --- Initialisation ---
 // Ajout des écouteurs d'événements sur chaque bouton
 buttons.forEach((button) => {
   button.addEventListener("click", () => handleButtonClick(button));
@@ -21,6 +22,7 @@ buttons.forEach((button) => {
 // Affiche la valeur initiale au démarrage
 updateDisplay();
 
+// --- Gestionnaire principal ---
 /**
  * Gère le clic sur un bouton de la calculatrice.
  * 
@@ -61,6 +63,7 @@ function handleButtonClick(button) {
   updateDisplay(); // Met à jour l’écran après chaque action
 }
 
+// --- Affichage ---
 /**
  * Met à jour le contenu de l’écran avec la valeur courante.
  */
@@ -68,6 +71,7 @@ function updateDisplay() {
   display.textContent = currentInput;
 }
 
+// --- Saisie ---
 /**
  * Gère l'entrée des chiffres.
  * - Remplace le zéro initial si besoin.
@@ -134,21 +138,6 @@ function handleOperatorInput(nextOperator) {
 }
 
 /**
- * Réinitialise l'état interne de la calculatrice
- * Met à zéro ou null toutes les variables importantes :
- * - currentInput : affichage courant
- * - firstOperand : premier opérande
- * - operator : opérateur actif
- * - waitingForSecondOperand : indique si on attend le second opérande
- */
-function resetState() {
-  currentInput = "0";
-  firstOperand = null;
-  operator = null;
-  waitingForSecondOperand = false;
-}
-
-/**
  * Gère le clic sur le bouton '='
  * Fonction principale pour effectuer le calcul lorsqu'un utilisateur
  * clique sur '='. Elle prend en compte :
@@ -188,6 +177,22 @@ function handleEqualInput() {
 }
 
 /**
+ * Réinitialise l'état interne de la calculatrice
+ * Met à zéro ou null toutes les variables importantes :
+ * - currentInput : affichage courant
+ * - firstOperand : premier opérande
+ * - operator : opérateur actif
+ * - waitingForSecondOperand : indique si on attend le second opérande
+ */
+function resetState() {
+  currentInput = "0";
+  firstOperand = null;
+  operator = null;
+  waitingForSecondOperand = false;
+}
+
+// --- Calculs ---
+/**
  * Effectue un calcul arithmétique entre deux nombres selon l'opérateur.
  * @param {number} num1 - Premier opérande.
  * @param {number} num2 - Second opérande.
@@ -222,6 +227,22 @@ function performCalculation(num1, num2, operator) {
   return result;
 }
 
+/**
+ * Calcule la valeur d'un pourcentage relatif.
+ *
+ * Exemple : calculatePercent(200, 10) → 20
+ *  - base : valeur de référence (ex. 200)
+ *  - value : pourcentage à appliquer (ex. 10)
+ *
+ * @param {number} base - La valeur de base sur laquelle calculer le pourcentage.
+ * @param {number} value - Le pourcentage à appliquer.
+ * @returns {number} La valeur correspondant au pourcentage de la base.
+ */
+function calculatePercent(base, value) {
+  return (base / 100) * value;
+}
+
+// --- Actions spéciales ---
 /**
  * Gère les actions spéciales de la calculatrice en fonction de la touche pressée.
  * 
@@ -274,21 +295,6 @@ function clearAll() {
  */
 function clear() {
   currentInput = "0";
-}
-
-/**
- * Calcule la valeur d'un pourcentage relatif.
- *
- * Exemple : calculatePercent(200, 10) → 20
- *  - base : valeur de référence (ex. 200)
- *  - value : pourcentage à appliquer (ex. 10)
- *
- * @param {number} base - La valeur de base sur laquelle calculer le pourcentage.
- * @param {number} value - Le pourcentage à appliquer.
- * @returns {number} La valeur correspondant au pourcentage de la base.
- */
-function calculatePercent(base, value) {
-  return (base / 100) * value;
 }
 
 /**
