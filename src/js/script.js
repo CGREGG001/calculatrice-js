@@ -360,3 +360,19 @@ function handleSqrt() {
     waitingForSecondOperand = false;
   }  
 }
+
+/**
+ * Inverse le signe de l'entrée actuelle de la calculatrice.
+ * - Si l'entrée est un nombre valide, multiplie par -1.
+ * - Si l'entrée est "Error" ou invalide, ne fait rien.
+ * - Met à jour le flag `waitingForSecondOperand` pour continuer la saisie normalement.
+ */
+function handleNegate() {
+  const value = parseFloat(currentInput);
+
+  if (!isNaN(value)) {
+    const negatedValue = value * -1;
+    currentInput = negatedValue.toString();
+    waitingForSecondOperand = false;
+  }
+}
