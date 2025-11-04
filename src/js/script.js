@@ -339,3 +339,24 @@ function handlePercentInput() {
   firstOperand = null;
   waitingForSecondOperand = true;
 }
+
+/**
+ * Calcule la racine carrée de l'entrée actuelle.
+ * - Si l'entrée est négative, réinitialise la calculatrice et affiche "Error".
+ * - Sinon, remplace l'entrée par la racine carrée du nombre.
+ * - Met à jour le flag `waitingForSecondOperand` pour préparer la prochaine saisie.
+ */
+function handleSqrt() {
+  let value = parseFloat(currentInput);
+  
+  if (value < 0) {
+    resetState();
+    currentInput = "Error"
+    waitingForSecondOperand = true;
+  }
+  else {
+    const squareRoot = Math.sqrt(value);
+    currentInput = squareRoot.toString();
+    waitingForSecondOperand = false;
+  }  
+}
