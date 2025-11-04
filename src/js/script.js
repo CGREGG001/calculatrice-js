@@ -12,6 +12,7 @@ let currentInput = "0"; // Valeur actuellement affichée
 let firstOperand = null; // Premier opérande (utilisé lors d’une opération)
 let operator = null; // Opérateur sélectionné (+, -, etc.)
 let waitingForSecondOperand = false; // Indique si on attend le deuxième nombre
+let memory = 0;
 
 // --- Initialisation ---
 // Ajout des écouteurs d'événements sur chaque bouton
@@ -391,5 +392,22 @@ function handleNegate() {
  *   - "recallClearMemory" : rappelle la valeur mémoire (ou la vide si déjà rappelée).
  */
 function handleMemoryInput(keyValue) {
-  // TODO: implémentation
+  switch (keyValue) {
+    case "memoryAdd":
+      handleMemoryAdd();
+      break;
+    case "memorySubtract":
+      break;
+    case "recallClearMemory":
+      break;
+  }
+}
+
+function handleMemoryAdd() {
+  const value = parseFloat(currentInput);
+
+  if (!isNaN(value))
+    memory += value;
+
+  waitingForSecondOperand = true;
 }
