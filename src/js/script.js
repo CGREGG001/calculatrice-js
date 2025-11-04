@@ -397,6 +397,7 @@ function handleMemoryInput(keyValue) {
       handleMemoryAdd();
       break;
     case "memorySubtract":
+      handleMemorySubtract();
       break;
     case "recallClearMemory":
       break;
@@ -408,6 +409,15 @@ function handleMemoryAdd() {
 
   if (!isNaN(value))
     memory += value;
+
+  waitingForSecondOperand = true;
+}
+
+function handleMemorySubtract() {
+  const value = parseFloat(currentInput);
+
+  if (!isNaN(value))
+    memory -= value;
 
   waitingForSecondOperand = true;
 }
