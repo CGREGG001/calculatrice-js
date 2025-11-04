@@ -23,8 +23,16 @@ updateDisplay();
 
 /**
  * Gère le clic sur un bouton de la calculatrice.
- * Détermine le type de bouton (nombre, point, opérateur, etc.)
- * et délègue le traitement à la fonction appropriée.
+ * 
+ * Détermine le type de bouton cliqué (nombre, point, opérateur, action spéciale)
+ * à partir des attributs `data-action` et `data-key` du bouton, 
+ * puis délègue le traitement à la fonction appropriée.
+ * 
+ * Après traitement, met à jour l'affichage de la calculatrice.
+ * 
+ * @param {HTMLElement} button - Le bouton cliqué, contenant les attributs :
+ *   - `data-action` : le type d'action ("number", "operator", "special")
+ *   - `data-key` : la valeur ou l'opérateur associé au bouton
  */
 function handleButtonClick(button) {
   const action = button.dataset.action;
@@ -214,6 +222,16 @@ function performCalculation(num1, num2, operator) {
   return result;
 }
 
+/**
+ * Gère les actions spéciales de la calculatrice en fonction de la touche pressée.
+ * 
+ * @param {string} keyValue - La touche représentant l'action spéciale à effectuer. Valeurs possibles :
+ *   - "clearAll" : Efface toutes les entrées et réinitialise la calculatrice.
+ *   - "clearEntry" : Efface l'entrée actuelle.
+ *   - "%" : Traite l'entrée en pourcentage.
+ *   - "sqrt" : Calcule la racine carrée de l'entrée actuelle.
+ *   - "negate" : Négative l'entrée actuelle (multiplie par -1).
+ */
 function handleSpecialAction(keyValue) {
   switch (keyValue) {
     case "clearAll":
