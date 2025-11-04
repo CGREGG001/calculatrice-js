@@ -419,6 +419,14 @@ function handleMemoryInput(keyValue) {
   }
 }
 
+/**
+ * Adds the current input value to the memory.
+ *
+ * Converts the `currentInput` string to a floating-point number.
+ * If the value is a valid number, it is added to the `memory` variable.
+ * After updating memory, sets `waitingForSecondOperand` to true
+ * to indicate that the next input should start a new number.
+ */
 function handleMemoryAdd() {
   const value = parseFloat(currentInput);
 
@@ -428,6 +436,14 @@ function handleMemoryAdd() {
   waitingForSecondOperand = true;
 }
 
+/**
+ * Subtracts the current input value from the memory.
+ *
+ * Converts the `currentInput` string to a floating-point number.
+ * If the value is a valid number, it is subtracted from the `memory` variable.
+ * After updating memory, sets `waitingForSecondOperand` to true
+ * to indicate that the next input should start a new number.
+ */
 function handleMemorySubtract() {
   const value = parseFloat(currentInput);
 
@@ -437,15 +453,31 @@ function handleMemorySubtract() {
   waitingForSecondOperand = true;
 }
 
+/**
+ * Recalls the value stored in memory and sets it as the current input.
+ *
+ * The `memory` value is converted to a string and displayed on the calculator's screen.
+ * Sets the `waitingForSecondOperand` flag to true to indicate that a new operation
+ * or number input is expected next.
+ * 
+ * Marks the `memoryIsRecalled` flag as true, so the next press of "recallClearMemory"
+ * will trigger the clearing of memory.
+ */
 function handleRecallMemory() {
   currentInput = memory.toString();
   waitingForSecondOperand = true;
   memoryIsRecalled = true;
-
-  console.log(memoryIsRecalled);
-  
 }
 
+/**
+ * Clears the memory and resets the display to 0.
+ *
+ * This function resets the `memory` variable to 0 and sets `currentInput` to 0,
+ * which updates the display to show "0". It also sets the `waitingForSecondOperand`
+ * flag to true, indicating that a new operand is expected. The `memoryIsRecalled` flag
+ * is set to false, ensuring that the next "recallClearMemory" action will recall memory
+ * instead of clearing it.
+ */
 function handleClearMemory() {
   memory = 0;
   currentInput = 0; // Afficher 0 dans le display
@@ -453,6 +485,17 @@ function handleClearMemory() {
   memoryIsRecalled = false;
 }
 
+/**
+ * Resets the `memoryIsRecalled` flag if the button clicked is not "recallClearMemory".
+ *
+ * This function is called after each button press to ensure that the `memoryIsRecalled` flag
+ * is reset to `false` unless the action is specifically "memory" and the key is "recallClearMemory".
+ * This is to prevent the flag from remaining true after a memory recall action, so that subsequent
+ * memory actions (like M+ or M-) will reset the state properly.
+ *
+ * @param {string} action - The type of action for the button clicked (e.g., "number", "operator", "memory").
+ * @param {string} keyValue - The specific key value of the button clicked (e.g., "1", "2", "+", "recallClearMemory").
+ */
 function resetMemoryRecallFlag(action, keyValue) {
   // Tout bouton autre que RM/CM réinitialise le flag
   if (!(action === "memory" && keyValue === "recallClearMemory")) {
