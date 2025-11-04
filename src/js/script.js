@@ -1,5 +1,10 @@
 // Sélection des éléments du DOM
-const display = document.querySelector(".display");
+if (!display) {
+  console.error("Élément d’affichage introuvable !");
+  return;
+}
+
+const display = document.getElementById("display");
 const buttons = document.querySelectorAll(".keyboard button");
 
 // Variables d'état principales de la calculatrice
@@ -22,19 +27,28 @@ updateDisplay();
  * et délègue le traitement à la fonction appropriée.
  */
 function handleButtonClick(button) {
+  const action = button.dataset.action;
   const keyValue = button.dataset.key; // Récupère la valeur associée au bouton
 
-  if (keyValue === "=") handleEqualInput();
-  else if (button.classList.contains("btn-ca")) clearAll();
-  else if (button.classList.contains("btn-c")) clear();
-  else if (button.classList.contains("btn-number"))
-    handleNumberInput(keyValue); // Gestion des chiffres
-  else if (button.classList.contains("btn-dot"))
-    handleDotInput(keyValue); // Gestion du point décimal
-  else if (button.classList.contains("btn-operator") && keyValue !== "=" && keyValue !== "%")
-    // Gestion des opérateurs exepté '='
-    handleOperatorInput(keyValue);
-  else if (keyValue === "%") handlePercentInput();
+  switch (action) {
+    case "number":
+      if (keyValue === ".")
+        handleDotInput(keyValue);
+      else 
+        handleNumberInput(keyValue);
+      break;
+    case "operator":
+        if (keyValue === "=")
+          handleEqualInput();
+        else
+          handleOperatorInput(keyValue);
+      break;
+    case "special" :
+        handleSpecialAction(keyValue);
+      break;
+    default:
+      break;
+  }
 
   updateDisplay(); // Met à jour l’écran après chaque action
 }
@@ -64,8 +78,6 @@ function handleNumberInput(keyValue) {
   } else {
     currentInput += keyValue; // Ajoute le chiffre à la fin du nombre courant
   }
-
-  console.log(currentInput); // (Debug) Affiche la valeur courante dans la console
 }
 
 /**
@@ -200,6 +212,26 @@ function performCalculation(num1, num2, operator) {
   }
 
   return result;
+}
+
+function handleSpecialAction(keyValue) {
+  switch (keyValue) {
+    case "clearAll":
+      clearAll();
+      break;
+    case "clearEntry":
+      clear();
+      break;
+    case "%":
+      handlePercentInput();
+      break;
+    case "sqrt":
+      handleSqrt();
+      break;
+    case "negate":
+      handleNegate();
+      break;
+  }
 }
 
 /**
