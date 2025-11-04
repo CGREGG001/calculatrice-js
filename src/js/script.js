@@ -1,11 +1,11 @@
 // Sélection des éléments du DOM
-if (!display) {
-  console.error("Élément d’affichage introuvable !");
-  return;
-}
 
 const display = document.getElementById("display");
 const buttons = document.querySelectorAll(".keyboard button");
+
+if (!display) {
+  console.error("Élément d’affichage introuvable !");
+}
 
 // Variables d'état principales de la calculatrice
 let currentInput = "0"; // Valeur actuellement affichée
