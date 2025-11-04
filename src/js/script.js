@@ -357,7 +357,7 @@ function handleSqrt() {
   else {
     const squareRoot = Math.sqrt(value);
     currentInput = squareRoot.toString();
-    waitingForSecondOperand = false;
+    waitingForSecondOperand = true;
   }  
 }
 
@@ -373,6 +373,6 @@ function handleNegate() {
   if (!isNaN(value)) {
     const negatedValue = value * -1;
     currentInput = negatedValue.toString();
-    waitingForSecondOperand = false;
+    waitingForSecondOperand = true;
   }
 }
